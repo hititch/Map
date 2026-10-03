@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Mind Map To-Do</title>
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1E2A24">
+<link rel="icon" href="icons/favicon.ico">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="To-Do Map">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Space+Mono:wght@400;700&family=Inter:wght@400;600;700&family=Merriweather:wght@400;700&family=Poppins:wght@400;600;700&family=Courier+Prime:wght@400;700&family=Kalam:wght@400;700&family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root, html[data-theme="chalkboard"]{
+    --bg-canvas:#1E2A24; --bg-node:#26332C; --bg-node-hover:#2D3C33; --ink:#EDEAE0; --ink-dim:#A8B0A9;
+    --chalk-yellow:#E8C468; --chalk-pink:#E9A0B5; --chalk-blue:#86B8D9; --line-muted:#4A564E;
+    --ctrl-green:#8FBF9F; --ctrl-green-dark:#1F3D28; --ctrl-yellow:#E8C468; --ctrl-yellow-dark:#4A3510;
+    --ctrl-blue:#86B8D9; --ctrl-blue-dark:#1C3547; --ctrl-bg-on:#EDE3C8;
+    --act-orange:#E8A868; --act-orange-dark:#4A3110; --act-purple:#C79EE8; --act-purple-dark:#33204A;
+    --act-red:#E97E7E; --act-red-dark:#4A1C1C; --act-green:#8FD9A0; --act-green-dark:#1F4A2C; --dot-rgb:237,234,224;
+  }
+  html[data-theme="midnight"]{
+    --bg-canvas:#161B2E; --bg-node:#1F2740; --bg-node-hover:#28324F; --ink:#E6E8F5; --ink-dim:#9AA1C4;
+    --chalk-yellow:#E8C468; --chalk-pink:#E39FD6; --chalk-blue:#8FA9F0; --line-muted:#3A4266;
+    --ctrl-green:#8FE0C4; --ctrl-green-dark:#123D33; --ctrl-yellow:#E8C468; --ctrl-yellow-dark:#4A3510;
+    --ctrl-blue:#8FA9F0; --ctrl-blue-dark:#1E2E5C; --ctrl-bg-on:#E3E6F8;
+    --act-orange:#F0A868; --act-orange-dark:#4A3010; --act-purple:#B79AF0; --act-purple-dark:#2E1F4F;
+    --act-red:#F08181; --act-red-dark:#4A1A1A; --act-green:#8FE0B0; --act-green-dark:#12402C; --dot-rgb:230,232,245;
+  }
+  html[data-theme="espresso"]{
+    --bg-canvas:#241B15; --bg-node:#332619; --bg-node-hover:#3F2F1F; --ink:#F0E6D8; --ink-dim:#BFA98F;
+    --chalk-yellow:#E8B860; --chalk-pink:#E9A88A; --chalk-blue:#9DBFCB; --line-muted:#5A4531;
+    --ctrl-green:#A8C48A; --ctrl-green-dark:#2C3D1E; --ctrl-yellow:#E8B860; --ctrl-yellow-dark:#4A3510;
+    --ctrl-blue:#9DBFCB; --ctrl-blue-dark:#233A42; --ctrl-bg-on:#F0E3C8;
+    --act-orange:#EA9A50; --act-orange-dark:#4A2E0D; --act-purple:#C9A0D8; --act-purple-dark:#3A2445;
+    --act-red:#E28572; --act-red-dark:#4A2018; --act-green:#A8D48A; --act-green-dark:#2C4A1E; --dot-rgb:240,230,216;
+  }
+  html[data-theme="obsidian"]{
+    --bg-canvas:#1C1D22; --bg-node:#26272E; --bg-node-hover:#2F3038; --ink:#E9E9EE; --ink-dim:#9C9DA8;
+    --chalk-yellow:#E0C87A; --chalk-pink:#D69AE0; --chalk-blue:#9AA8E0; --line-muted:#464752;
+    --ctrl-green:#8FBFB0; --ctrl-green-dark:#1F3D34; --ctrl-yellow:#E0C87A; --ctrl-yellow-dark:#453A12;
+    --ctrl-blue:#9AA8E0; --ctrl-blue-dark:#242C52; --ctrl-bg-on:#E6E4F0;
+    --act-orange:#E0A468; --act-orange-dark:#452F10; --act-purple:#B49AE0; --act-purple-dark:#2E2245;
+    --act-red:#DD8484; --act-red-dark:#451D1D; --act-green:#8FCFAE; --act-green-dark:#1F452F; --dot-rgb:233,233,238;
+  }
+  html[data-theme="nebula"]{
+    --bg-canvas:#1E1530; --bg-node:#2A1E42; --bg-node-hover:#35284F; --ink:#F0E6FA; --ink-dim:#B39AC9;
+    --chalk-yellow:#EBC978; --chalk-pink:#F09AD0; --chalk-blue:#A99AF0; --line-muted:#4E3A6E;
+    --ctrl-green:#9AE0C0; --ctrl-green-dark:#173D2C; --ctrl-yellow:#EBC978; --ctrl-yellow-dark:#4A3712;
+    --ctrl-blue:#A99AF0; --ctrl-blue-dark:#2A215C; --ctrl-bg-on:#F0E6FA;
+    --act-orange:#F0A868; --act-orange-dark:#4A3010; --act-purple:#CB9EF5; --act-purple-dark:#3A2350;
+    --act-red:#F08AAE; --act-red-dark:#4A1E2E; --act-green:#9AE8C0; --act-green-dark:#17402C; --dot-rgb:240,230,250;
+  }
+  html[data-theme="terminal"]{
+    --bg-canvas:#0D120E; --bg-node:#141C16; --bg-node-hover:#1B2620; --ink:#D8ECD9; --ink-dim:#7FA080;
+    --chalk-yellow:#E0C468; --chalk-pink:#E08A6A; --chalk-blue:#6ED6A0; --line-muted:#31402F;
+    --ctrl-green:#6ED6A0; --ctrl-green-dark:#123D24; --ctrl-yellow:#E0C468; --ctrl-yellow-dark:#453510;
+    --ctrl-blue:#6ED6A0; --ctrl-blue-dark:#143D28; --ctrl-bg-on:#DCEEDD;
+    --act-orange:#E0A050; --act-orange-dark:#452C0D; --act-purple:#A0D6A8; --act-purple-dark:#1F3D24;
+    --act-red:#E0806A; --act-red-dark:#451F14; --act-green:#7EE0A0; --act-green-dark:#144A28; --dot-rgb:216,236,217;
+  }
+  html[data-theme="parchment"]{
+    --bg-canvas:#EDE3CD; --bg-node:#F6EFDF; --bg-node-hover:#FCF7EB; --ink:#3A2E1F; --ink-dim:#7A6A50;
+    --chalk-yellow:#9C6F1C; --chalk-pink:#A8546A; --chalk-blue:#2E6482; --line-muted:#C4B28C;
+    --ctrl-green:#3F7A4A; --ctrl-green-dark:#1F5A2C; --ctrl-yellow:#9C6F1C; --ctrl-yellow-dark:#6B4C10;
+    --ctrl-blue:#2E6482; --ctrl-blue-dark:#1C4560; --ctrl-bg-on:#FFFFFF;
+    --act-orange:#B5691E; --act-orange-dark:#7A4712; --act-purple:#7C56B0; --act-purple-dark:#4F3676;
+    --act-red:#B03E3E; --act-red-dark:#7A2A2A; --act-green:#3F8A4A; --act-green-dark:#245A2C; --dot-rgb:58,46,31;
+  }
+  html[data-theme="daylight"]{
+    --bg-canvas:#F0F2F5; --bg-node:#FFFFFF; --bg-node-hover:#F7F9FB; --ink:#242A32; --ink-dim:#69707C;
+    --chalk-yellow:#B08423; --chalk-pink:#C05C7A; --chalk-blue:#2F6FA8; --line-muted:#D2D7DE;
+    --ctrl-green:#2E8659; --ctrl-green-dark:#1C5A3A; --ctrl-yellow:#B08423; --ctrl-yellow-dark:#7A5A18;
+    --ctrl-blue:#2F6FA8; --ctrl-blue-dark:#1D4A70; --ctrl-bg-on:#FFFFFF;
+    --act-orange:#C06A1E; --act-orange-dark:#8A4A12; --act-purple:#7454B5; --act-purple-dark:#4C3878;
+    --act-red:#C03E3E; --act-red-dark:#822A2A; --act-green:#2E9659; --act-green-dark:#1C5A3A; --dot-rgb:36,42,50;
+  }
+  :root{ --body-font:'Patrick Hand',cursive; }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;background:var(--bg-canvas);font-family:var(--body-font);color:var(--ink);overflow:hidden;transition:background .2s ease, color .2s ease;}
+  body{
+    background-image:
+      radial-gradient(rgba(var(--dot-rgb),0.035) 1px, transparent 1px),
+      radial-gradient(rgba(var(--dot-rgb),0.025) 1px, transparent 1px);
+    background-size: 26px 26px, 26px 26px;
+    background-position: 0 0, 13px 13px;
+  }
+  .app{display:flex;flex-direction:column;height:100vh;}
+  header{
+    display:flex;align-items:baseline;justify-content:space-between;
+    padding:14px 22px 10px 26px;flex-shrink:0;gap:16px;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:baseline;gap:10px;}
+  .brand .mark{font-family:'Space Mono',monospace;font-size:13px;color:var(--chalk-blue);letter-spacing:2px;}
+  .title-edit{
+    font-family:'Caveat',cursive;font-weight:700;font-size:34px;margin:0;
+    color:var(--ink);line-height:1;outline:none;cursor:text;
+    border-bottom:1.5px dashed var(--line-muted);padding:0 2px;
+  }
+  .title-edit:hover, .title-edit:focus{border-bottom-color:var(--chalk-blue);}
+  .hint{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:0.6px;color:var(--ink-dim);text-transform:uppercase;}
+  .actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .status{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--chalk-blue);letter-spacing:0.5px;white-space:nowrap;}
+  .pill{
+    font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.5px;
+    background:transparent;color:var(--ink-dim);border:1.5px dashed var(--line-muted);
+    border-radius:14px;padding:6px 13px;cursor:pointer;text-transform:uppercase;
+    transition:all .15s ease;white-space:nowrap;
+  }
+  .pill:hover{color:var(--ink);border-color:var(--chalk-pink);}
+  select.pill{-webkit-appearance:none;appearance:none;padding-right:22px;
+    background-image:linear-gradient(45deg, transparent 50%, var(--ink-dim) 50%), linear-gradient(135deg, var(--ink-dim) 50%, transparent 50%);
+    background-position:calc(100% - 13px) center, calc(100% - 8px) center; background-size:5px 5px, 5px 5px; background-repeat:no-repeat;
+  }
+  select.pill option{background:var(--bg-node);color:var(--ink);}
+  .pill.export{border-style:solid;border-color:var(--ctrl-green);color:var(--ctrl-green);}
+  .pill.export:hover{background:var(--ctrl-green);color:var(--bg-canvas);}
+  .tabbar{display:flex;align-items:center;gap:8px;padding:0 26px 12px;border-bottom:1.5px dashed var(--line-muted);flex-shrink:0;overflow-x:auto;}
+  .tab{
+    display:flex;align-items:center;gap:6px;font-family:'Space Mono',monospace;font-size:11px;color:var(--ink-dim);
+    background:var(--bg-node);border:1.5px solid var(--line-muted);border-radius:12px;
+    padding:5px 10px;cursor:pointer;white-space:nowrap;transition:all .15s ease;flex-shrink:0;
+  }
+  .tab:hover{color:var(--ink);border-color:var(--chalk-blue);}
+  .tab.active{color:var(--bg-canvas);background:var(--chalk-yellow);border-color:var(--chalk-yellow);font-weight:700;}
+  .tab .tab-x{opacity:.6;padding-left:2px;}
+  .tab .tab-x:hover{opacity:1;color:var(--chalk-pink);}
+  .tab-add{
+    width:24px;height:24px;flex-shrink:0;border-radius:50%;border:1.5px dashed var(--line-muted);
+    background:transparent;color:var(--ink-dim);cursor:pointer;font-size:14px;
+    display:flex;align-items:center;justify-content:center;transition:all .15s ease;
+  }
+  .tab-add:hover{color:var(--bg-canvas);background:var(--chalk-blue);border-color:var(--chalk-blue);}
+  .canvas-wrap{flex:1;overflow:hidden;position:relative;cursor:grab;touch-action:none;}
+  .canvas-wrap.panning{cursor:grabbing;}
+  .world{position:absolute;left:0;top:0;}
+  svg.wires{position:absolute;pointer-events:none;overflow:visible;}
+  svg.wires path{fill:none;stroke:var(--line-muted);stroke-width:1.6;stroke-dasharray:1 6;stroke-linecap:round;}
+
+  .node-box{
+    position:absolute;display:flex;flex-direction:column;
+    min-width:130px;max-width:260px;width:max-content;
+    background:var(--bg-node);border:1.5px dashed var(--line-muted);
+    border-radius:7px 11px 9px 13px;padding:8px 11px;
+    transition:background .15s ease, border-color .15s ease;user-select:none;cursor:grab;touch-action:none;
+  }
+  .node-box:hover{background:var(--bg-node-hover);border-color:var(--chalk-blue);}
+  .node-box.root{border-style:solid;border-width:2px;border-color:var(--chalk-yellow);border-radius:14px;max-width:300px;min-width:180px;}
+  .node-box.root .text{font-size:20px;font-weight:700;}
+  .node-box.expanded{max-width:none;width:380px;min-height:260px;cursor:default;}
+  .node-box.selected{outline:2px solid var(--chalk-blue);outline-offset:3px;}
+  .node-box.drop-target{border-color:var(--chalk-pink);box-shadow:0 0 0 3px rgba(233,160,181,0.35);}
+
+  .content-row{display:flex;align-items:flex-start;gap:6px;width:100%;}
+
+  .resize-handle{
+    position:absolute;right:2px;bottom:2px;width:16px;height:16px;cursor:nwse-resize;
+    color:var(--line-muted);display:flex;align-items:flex-end;justify-content:flex-end;
+    font-size:12px;line-height:1;user-select:none;
+  }
+  .resize-handle:hover{color:var(--chalk-blue);}
+
+  .collapse-btn{
+    position:absolute;min-width:20px;height:20px;padding:0 5px;flex-shrink:0;
+    border:1.5px solid var(--line-muted);border-radius:10px;background:var(--bg-canvas);color:var(--ink-dim);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Mono',monospace;font-size:10px;cursor:pointer;transition:all .15s ease;
+  }
+  .collapse-btn:hover{border-color:var(--chalk-blue);color:var(--chalk-blue);}
+
+  .markers{display:flex;align-items:center;gap:5px;flex-shrink:0;margin-top:2px;}
+  .marker{font-family:'Space Mono',monospace;font-size:13px;user-select:none;}
+  .marker.bullet{color:var(--ctrl-blue);font-size:16px;line-height:1;}
+  .marker.seq{color:var(--ctrl-green);font-weight:700;}
+  .checkbox{
+    width:16px;height:16px;flex-shrink:0;border-radius:4px;margin-top:2px;
+    border:1.6px solid var(--ctrl-yellow);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ctrl-yellow);
+  }
+  .checkbox.checked{background:var(--ctrl-yellow);color:var(--bg-node);}
+
+  .text{
+    flex:1;min-width:0;font-size:15.5px;line-height:1.3;
+    white-space:normal;overflow-wrap:break-word;word-break:break-word;color:var(--ink);cursor:text;
+    outline:1.5px dashed var(--line-muted);outline-offset:2px;border-radius:4px;
+  }
+  .text[contenteditable="true"]:hover{outline-color:var(--chalk-blue);}
+  .text[contenteditable="true"]:focus{outline:1.5px dashed var(--chalk-blue);outline-offset:2px;}
+  .node-box.is-checked .text{text-decoration:line-through;opacity:0.5;}
+
+  .notes-dot{position:absolute;top:6px;right:8px;width:6px;height:6px;border-radius:50%;background:var(--ctrl-blue);}
+
+  .toolbar{display:flex;gap:3px;margin-top:7px;padding-top:6px;border-top:1px dashed var(--line-muted);opacity:.4;transition:opacity .15s ease;width:100%;}
+  .node-box:hover .toolbar{opacity:1;}
+  .toolbar button{
+    width:19px;height:19px;border-radius:50%;border:1px solid var(--line-muted);
+    background:var(--bg-canvas);color:var(--ink-dim);font-size:10px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;transition:all .15s ease;
+  }
+  .toolbar button:hover{filter:brightness(1.25);}
+  .toolbar .markerToggle{border-color:var(--ctrl-blue);color:var(--ctrl-blue);}
+  .toolbar .markerToggle.active{background:var(--ctrl-bg-on);border-color:var(--ctrl-blue);color:var(--ctrl-blue-dark);}
+  .toolbar .checkToggle{border-color:var(--ctrl-yellow);color:var(--ctrl-yellow);}
+  .toolbar .checkToggle.active{background:var(--ctrl-bg-on);border-color:var(--ctrl-yellow);color:var(--ctrl-yellow-dark);}
+  .toolbar .notesBtn{border-color:var(--act-purple);color:var(--act-purple);} /* item 4.2 */
+  .toolbar .notesBtn:hover{background:var(--act-purple);border-color:var(--act-purple);color:var(--bg-canvas);}
+  .toolbar .add{border-color:var(--act-green);color:var(--act-green);} /* item 4.2 */
+  .toolbar .add:hover{background:var(--act-green);border-color:var(--act-green);color:var(--bg-canvas);}
+  .toolbar .del{border-color:var(--act-red);color:var(--act-red);}
+  .toolbar .del:hover{background:var(--act-red);border-color:var(--act-red);color:var(--bg-canvas);}
+  .toolbar .del:disabled{border-color:var(--act-red-dark);color:var(--act-red-dark);cursor:not-allowed;opacity:.55;}
+  .toolbar .del:disabled:hover{background:transparent;color:var(--act-red-dark);filter:none;}
+
+  .expand-head{display:flex;align-items:flex-start;gap:8px;width:100%;}
+  .expand-head .text{font-size:17px;font-weight:700;}
+  .icon-btn{
+    width:22px;height:22px;flex-shrink:0;border-radius:50%;border:1px solid var(--line-muted);
+    background:var(--bg-canvas);color:var(--ink-dim);cursor:pointer;font-size:11px;
+    display:flex;align-items:center;justify-content:center;transition:all .15s ease;
+  }
+  .icon-btn:hover{background:var(--chalk-pink);border-color:var(--chalk-pink);color:var(--bg-canvas);}
+  .icon-btn.add-variant{border-color:var(--act-green);color:var(--act-green);} /* item 4.2 */
+  .icon-btn.add-variant:hover{background:var(--act-green);border-color:var(--act-green);color:var(--bg-canvas);}
+  .icon-btn.shrink-variant{border-color:var(--act-purple);color:var(--act-purple);} /* item 4.3: same purple as expand */
+  .icon-btn.shrink-variant:hover{background:var(--act-purple);border-color:var(--act-purple);color:var(--bg-canvas);}
+  .icon-btn.del-variant{border-color:var(--act-red);color:var(--act-red);} /* item 4.5 */
+  .icon-btn.del-variant:hover{background:var(--act-red);border-color:var(--act-red);color:var(--bg-canvas);}
+  .icon-btn.del-variant:disabled{border-color:var(--act-red-dark);color:var(--act-red-dark);cursor:not-allowed;opacity:.55;}
+  .icon-btn.del-variant:disabled:hover{background:transparent;color:var(--act-red-dark);}
+  .icon-btn.checkToggle{border-color:var(--ctrl-yellow);color:var(--ctrl-yellow);}
+  .icon-btn.checkToggle.active{background:var(--ctrl-bg-on);border-color:var(--ctrl-yellow);color:var(--ctrl-yellow-dark);}
+  .expand-toolbar{display:flex;gap:5px;flex-wrap:wrap;margin:9px 0;}
+  .expand-toolbar button{
+    font-family:'Space Mono',monospace;font-size:10.5px;background:var(--bg-canvas);color:var(--ink-dim);
+    border:1.5px dashed var(--line-muted);border-radius:6px;padding:4px 8px;cursor:pointer;transition:all .15s ease;
+  }
+  .expand-toolbar button:hover{color:var(--ink);border-color:var(--chalk-blue);}
+  .notes-editor{
+    flex:1;min-height:150px;overflow:auto;font-size:15px;line-height:1.5;
+    color:var(--ink);border-top:1px dashed var(--line-muted);padding-top:9px;cursor:text;
+    outline:1.5px dashed var(--line-muted);outline-offset:4px;border-radius:4px;touch-action:pan-y;
+  }
+  .notes-editor:hover{outline-color:var(--chalk-blue);}
+  .notes-editor:focus{outline:1.5px dashed var(--chalk-blue);outline-offset:4px;}
+  .notes-editor h3{font-family:'Caveat',cursive;font-size:24px;color:var(--chalk-yellow);margin:0.4em 0 0.2em;}
+  .notes-editor ul{padding-left:1.2em;}
+  .notes-editor ol{padding-left:1.2em;}
+  .notes-editor li{margin:2px 0;}
+  .notes-editor:empty:before{content:'Write freely here…';color:var(--ink-dim);}
+  .note-check{display:flex;align-items:flex-start;gap:7px;margin:3px 0;}
+  .note-check-toggle{
+    flex-shrink:0;width:15px;height:15px;margin-top:2px;border-radius:4px;cursor:pointer;
+    border:1.6px solid var(--ctrl-yellow);color:var(--ctrl-yellow);
+    display:flex;align-items:center;justify-content:center;font-size:10px;line-height:1;user-select:none;
+  }
+  .note-check.checked .note-check-toggle{background:var(--ctrl-yellow);color:var(--bg-node);}
+  .note-check-label{flex:1;min-width:0;}
+  .note-check.checked .note-check-label{text-decoration:line-through;opacity:.55;}
+
+  .loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Caveat',cursive;font-size:24px;color:var(--ink-dim);}
+  ::-webkit-scrollbar{width:12px;height:12px;}
+  ::-webkit-scrollbar-track{background:var(--bg-canvas);}
+  ::-webkit-scrollbar-thumb{background:var(--line-muted);border-radius:6px;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <span class="mark">◍</span>
+      <div class="title-edit" id="titleEdit" contenteditable="true" spellcheck="false">Name</div>
+      <span class="hint">notepad · mind map · to‑do (standalone)</span>
+    </div>
+    <div class="actions">
+      <span class="status" id="status">Last Saved —</span>
+      <select class="pill" id="themeSelect" title="Color theme"></select>
+      <select class="pill" id="fontSelect" title="Font"></select>
+      <button class="pill" id="undoBtn" title="Undo (Ctrl+Z)">Undo</button>
+      <button class="pill" id="redoBtn" title="Redo (Ctrl+Y)">Redo</button>
+      <button class="pill" id="centerBtn">Center</button>
+      <button class="pill" id="expandAllBtn">Expand all</button>
+      <button class="pill" id="collapseAllBtn">Collapse all</button>
+      <button class="pill export" id="exportBtn" title="Download a standalone, functional copy of this map">Export HTML</button>
+      <button class="pill" id="resetBtn">Reset map</button>
+    </div>
+  </header>
+  <div class="tabbar" id="tabbar"></div>
+  <div class="canvas-wrap" id="canvasWrap">
+    <div class="world" id="world"></div>
+  </div>
+</div>
+<script>
+(function(){
+  const ORIGINAL_HTML = document.documentElement.outerHTML; // pristine template, captured before any render() runs — used by Export HTML
+  const GAP_X=260, STACK_Y=70, MIN_GAP=12, HALF=4000, DRAG_MARGIN=18, STORAGE_KEY='chalkmap-standalone-map', THEME_KEY='chalkmap-theme', FONT_KEY='chalkmap-font', MAX_HISTORY=100;
+  const THEMES=[
+    ['chalkboard','Chalkboard (dark)'],['midnight','Midnight Ink (dark)'],['espresso','Espresso (dark)'],
+    ['obsidian','Obsidian (dark)'],['nebula','Nebula (dark)'],['terminal','Terminal (dark)'],
+    ['parchment','Parchment (light)'],['daylight','Daylight (light)']
+  ];
+  const FONTS=[
+    ['patrick',"'Patrick Hand',cursive",'Patrick Hand (default)'],
+    ['space',"'Space Mono',monospace",'Space Mono'],
+    ['inter',"'Inter',sans-serif",'Inter'],
+    ['merri',"'Merriweather',serif",'Merriweather'],
+    ['poppins',"'Poppins',sans-serif",'Poppins'],
+    ['courier',"'Courier Prime',monospace",'Courier Prime'],
+    ['kalam',"'Kalam',cursive",'Kalam'],
+    ['plex',"'IBM Plex Sans',sans-serif",'IBM Plex Sans']
+  ];
+  function uid(){return 'n'+Math.random().toString(36).slice(2,10);}
+  function blankNode(text){return {id:uid(),text,marker:'none',checkbox:false,checked:false,notes:'',notesOpen:false,collapsed:false,dir:0,x:0,y:0,manual:false,children:[]};}
+  function migrateNode(node){ // item 1: keep old saved maps (bullet/sequence fields) working under the new unified marker model
+    if(node.marker===undefined){ node.marker = node.bullet ? 'bullet' : ((node.sequence && node.sequence!=='none') ? node.sequence : 'none'); }
+    for(const c of node.children) migrateNode(c);
+    return node;
+  }
+  function demoMap(){
+    const t = JSON.parse('{"id":"nsp1d3zeb","text":"My To\u2011Do Map","bullet":false,"sequence":"none","checkbox":false,"checked":false,"notes":"","notesOpen":false,"collapsed":false,"dir":0,"x":0,"y":0,"manual":false,"children":[{"id":"n8lgp9rv5","text":"Launch plan","bullet":false,"sequence":"number","checkbox":false,"checked":false,"notes":"<h3>Goal</h3><p>Ship the beta by Q3.</p><ul><li>Confirm budget</li><li>Line up beta testers</li></ul>","notesOpen":false,"collapsed":false,"dir":-1,"x":-241.5,"y":0,"manual":false,"children":[{"id":"npo745zkg","text":"=","bullet":false,"sequence":"number","checkbox":false,"checked":false,"notes":"","notesOpen":false,"collapsed":false,"dir":-1,"x":-849.25,"y":32,"manual":true,"children":[{"id":"n4grzbwh5","text":"Send calendar invite","bullet":false,"sequence":"none","checkbox":true,"checked":false,"notes":"","notesOpen":false,"collapsed":false,"dir":-1,"x":-865,"y":165.5,"manual":false,"children":[{"id":"navzyxuzd","text":"Draft outline","bullet":false,"sequence":"number","checkbox":false,"checked":false,"notes":"","notesOpen":false,"collapsed":false,"dir":-1,"x":-1067.75,"y":-25,"manual":true,"children":[]}]}]}]},{"id":"ny1ttrcqp","text":"Someday ideas","bullet":false,"sequence":"letter","checkbox":false,"checked":false,"notes":"","notesOpen":false,"collapsed":false,"dir":1,"x":260,"y":100,"manual":false,"children":[{"id":"nxgv9ubz3","text":"Weekend trip","bullet":false,"sequence":"letter","checkbox":false,"checked":false,"notes":"","notesOpen":false,"collapsed":false,"dir":1,"x":520,"y":147.5,"manual":false,"children":[]}]}]}');
+    migrateNode(t);
+    return {id:uid(), name:t.text, tree:t, history:[], historyIndex:-1};
+  }
+  let maps = [demoMap()];
+  let activeMapId = maps[0].id;
+  let mainTree = maps[0].tree;
+  let title = maps[0].name;
+  let panX=0,panY=0,scale=1,renderQueued=false,selectedIds=new Set(),dropTargetId=null;
+  let history=[],historyIndex=-1,restoringHistory=false;
+  function toLetters(n){let s='';while(n>0){n--;s=String.fromCharCode(97+(n%26))+s;n=Math.floor(n/26);}return s;}
+  function debounce(fn,ms){let t;return function(...a){clearTimeout(t);t=setTimeout(()=>fn.apply(this,a),ms);};}
+  // Touch support: canvas panning, node dragging, and notepad resizing were mouse-only (mousedown/mousemove/mouseup),
+  // so none of it responded to touch on phones/tablets. eventXY() reads clientX/clientY from either a MouseEvent
+  // or a TouchEvent (touches for start/move, changedTouches for end) so the same drag logic below can drive both.
+  function eventXY(e){ const t=(e.touches&&e.touches[0])||(e.changedTouches&&e.changedTouches[0]); return t?{clientX:t.clientX,clientY:t.clientY}:{clientX:e.clientX,clientY:e.clientY}; }
+  function isTouch(e){ return !!(e.touches||e.changedTouches); }
+  let activeDrag=null; // the in-progress single-pointer drag (pan / node drag / resize), so a second finger (pinch) can end it cleanly
+  function addDragListeners(moveFn,upFn){
+    activeDrag={upFn};
+    document.addEventListener('mousemove',moveFn); document.addEventListener('mouseup',upFn);
+    document.addEventListener('touchmove',moveFn,{passive:false}); document.addEventListener('touchend',upFn); document.addEventListener('touchcancel',upFn);
+  }
+  function removeDragListeners(moveFn,upFn){
+    if(activeDrag && activeDrag.upFn===upFn) activeDrag=null;
+    document.removeEventListener('mousemove',moveFn); document.removeEventListener('mouseup',upFn);
+    document.removeEventListener('touchmove',moveFn); document.removeEventListener('touchend',upFn); document.removeEventListener('touchcancel',upFn);
+  }
+  function resolveOverlaps(root){
+    const nodes = []; collectVisible(root, nodes);
+    for(let iter=0; iter<8; iter++){ // was 4 — more headroom to fully converge when 3+ expanded notepads mutually overlap
+      let any = false;
+      for(let i=0;i<nodes.length;i++){
+        for(let j=i+1;j<nodes.length;j++){
+          const a = nodes[i], b = nodes[j];
+          if(a._w == null || b._w == null) continue;
+          const ax1=a.x-a._w/2-MIN_GAP/2, ax2=a.x+a._w/2+MIN_GAP/2, ay1=a.y-a._h/2-MIN_GAP/2, ay2=a.y+a._h/2+MIN_GAP/2;
+          const bx1=b.x-b._w/2-MIN_GAP/2, bx2=b.x+b._w/2+MIN_GAP/2, by1=b.y-b._h/2-MIN_GAP/2, by2=b.y+b._h/2+MIN_GAP/2;
+          const overlapX = Math.min(ax2,bx2) - Math.max(ax1,bx1);
+          const overlapY = Math.min(ay2,by2) - Math.max(ay1,by1);
+          if(overlapX > 0 && overlapY > 0){
+            any = true;
+            const aFixed = a.dir === 0 || a.manual || a.notesOpen || a._editing;
+            const bFixed = b.dir === 0 || b.manual || b.notesOpen || b._editing;
+            const axis = overlapX < overlapY ? 'x' : 'y';
+            const push = axis === 'x' ? overlapX : overlapY;
+            const aBefore = axis === 'x' ? a.x < b.x : a.y < b.y;
+            function move(n, amt){ if(axis==='x') n.x += amt; else n.y += amt; }
+            if(aFixed && bFixed){
+              const half = push/2;
+              move(a, aBefore ? -half : half);
+              move(b, aBefore ? half : -half);
+            } else if(aFixed){
+              move(b, aBefore ? push : -push);
+            } else if(bFixed){
+              move(a, aBefore ? -push : push);
+            } else {
+              const half = push/2;
+              move(a, aBefore ? -half : half);
+              move(b, aBefore ? half : -half);
+            }
+          }
+        }
+      }
+      if(!any) break;
+    }
+  }
+  function collectVisible(node, arr){
+    arr.push(node);
+    if(!node.collapsed) for(const c of node.children) collectVisible(c, arr);
+  }
+  function boxesOverlapArea(a, b){
+    const ax1=a.x-a._w/2, ax2=a.x+a._w/2, ay1=a.y-a._h/2, ay2=a.y+a._h/2;
+    const bx1=b.x-b._w/2, bx2=b.x+b._w/2, by1=b.y-b._h/2, by2=b.y+b._h/2;
+    const ox = Math.min(ax2,bx2) - Math.max(ax1,bx1);
+    const oy = Math.min(ay2,by2) - Math.max(ay1,by1);
+    return (ox > 0 && oy > 0) ? ox*oy : 0;
+  }
+  function findParent(node, id, parent){
+    if(node.id === id) return parent;
+    for(const c of node.children){
+      const r = findParent(c, id, node);
+      if(r !== undefined) return r;
+    }
+    return undefined;
+  }
+  function findNode(node, id){
+    if(node.id === id) return node;
+    for(const c of node.children){
+      const r = findNode(c, id);
+      if(r) return r;
+    }
+    return null;
+  }
+  function isDescendant(node, id){
+    for(const c of node.children){
+      if(c.id === id || isDescendant(c, id)) return true;
+    }
+    return false;
+  }
+  function placeNewChild(parent, dir){
+    const kids = parent.children;
+    const y = kids.length ? kids[kids.length-1].y + STACK_Y : parent.y;
+    const x = parent.x + dir*GAP_X;
+    return { x, y };
+  }
+  function tree(){ return mainTree; }
+  function getActiveMap(){ return maps.find(m=>m.id===activeMapId) || maps[0]; }
+  function setMainTree(t){ mainTree=t; const m=getActiveMap(); if(m) m.tree=mainTree; }
+  function setTitle(t){ title=t; const m=getActiveMap(); if(m) m.name=title; renderTabs(); }
+  function formatTimestamp(d){
+    const mm=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0'), yy=String(d.getFullYear()).slice(-2);
+    let h=d.getHours(); const ampm=h>=12?'PM':'AM'; h=h%12; if(h===0) h=12;
+    const hh=String(h).padStart(2,'0'), mi=String(d.getMinutes()).padStart(2,'0'), ss=String(d.getSeconds()).padStart(2,'0');
+    return mm+'/'+dd+'/'+yy+' '+hh+':'+mi+':'+ss+' '+ampm;
+  }
+  function scheduleSave(){ pushHistory(); clearTimeout(scheduleSave._t); scheduleSave._t=setTimeout(saveData,400); }
+  function saveData(){
+    try{
+      const m=getActiveMap(); if(m){ m.tree=mainTree; m.name=title; m.history=history; m.historyIndex=historyIndex; }
+      const payload = { maps: maps.map(mm=>({id:mm.id,name:mm.name,tree:mm.tree})), activeMapId };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload, (k,v)=>k.startsWith('_')?undefined:v));
+      const s=document.getElementById('status'); if(s) s.textContent='Last Saved '+formatTimestamp(new Date()); // item 4.1: persistent timestamp instead of a transient "saved" flash
+    }catch(e){}
+  }
+  function loadSaved(){
+    if(window.__EXPORTED_TREE__){ // item 4.2: an exported standalone file boots straight from its baked-in map
+      const t=migrateNode(window.__EXPORTED_TREE__);
+      maps=[{id:uid(), name:window.__EXPORTED_TITLE__||t.text||'Untitled', tree:t, history:[], historyIndex:-1}];
+      activeMapId=maps[0].id;
+    } else {
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(raw){
+          const parsed=JSON.parse(raw);
+          if(parsed && Array.isArray(parsed.maps) && parsed.maps.length){ // item 3: multiple maps per window
+            maps = parsed.maps.map(mm=>({id:mm.id||uid(), name:mm.name||(mm.tree&&mm.tree.text)||'Untitled', tree:migrateNode(mm.tree||blankNode('Untitled')), history:[], historyIndex:-1}));
+            activeMapId = (parsed.activeMapId && maps.find(m=>m.id===parsed.activeMapId)) ? parsed.activeMapId : maps[0].id;
+          } else if(parsed && parsed.tree){ // legacy single-map storage format from earlier versions
+            maps=[{id:uid(), name:parsed.title||parsed.tree.text||'Untitled', tree:migrateNode(parsed.tree), history:[], historyIndex:-1}];
+            activeMapId=maps[0].id;
+          }
+        }
+      }catch(e){}
+    }
+    const m=getActiveMap();
+    mainTree = m.tree; title = m.name || mainTree.text; // item 7: map name and root segment text always match
+    history=[]; historyIndex=-1;
+  }
+  function updateDocTitle(){ document.title = title + ' \u2013 Mind Map'; }
+  function snapshotState(){
+    return JSON.parse(JSON.stringify({tree:mainTree,title:title}, (k,v)=>k.startsWith('_')?undefined:v));
+  }
+  function pushHistory(){
+    if(restoringHistory) return;
+    const snap=snapshotState(), snapStr=JSON.stringify(snap);
+    if(historyIndex>=0 && JSON.stringify(history[historyIndex])===snapStr) return;
+    history=history.slice(0,historyIndex+1);
+    history.push(snap);
+    if(history.length>MAX_HISTORY) history.shift();
+    historyIndex=history.length-1;
+    const m=getActiveMap(); if(m){ m.history=history; m.historyIndex=historyIndex; }
+  }
+  function applyHistoryState(snap){
+    restoringHistory=true;
+    setMainTree(JSON.parse(JSON.stringify(snap.tree)));
+    setTitle(snap.title);
+    const t=document.getElementById('titleEdit'); if(t) t.textContent=title;
+    updateDocTitle();
+    selectedIds.clear(); dropTargetId=null;
+    commitLayout();
+    scheduleSave();
+    restoringHistory=false;
+  }
+  function undo(){ if(historyIndex<=0) return; historyIndex--; const m=getActiveMap(); if(m) m.historyIndex=historyIndex; applyHistoryState(history[historyIndex]); }
+  function redo(){ if(historyIndex>=history.length-1) return; historyIndex++; const m=getActiveMap(); if(m) m.historyIndex=historyIndex; applyHistoryState(history[historyIndex]); }
+  // ---------- multiple mind maps per window (item 3) ----------
+  function renderTabs(){
+    // Uses data-map-id + one delegated listener (setupTabbar) rather than per-element listeners, and
+    // patches existing tab elements in place when the map list itself hasn't changed. Both guard against
+    // a rebuild landing mid-gesture (e.g. renderTabs firing from a titleEdit blur during a tab click),
+    // which would otherwise swap out the element the browser is mid-click on and drop the click.
+    const bar=document.getElementById('tabbar'); if(!bar) return;
+    const existingIds = Array.from(bar.querySelectorAll('.tab')).map(t=>t.getAttribute('data-map-id'));
+    const currentIds = maps.map(m=>m.id);
+    const structureChanged = existingIds.length!==currentIds.length || existingIds.some((id,i)=>id!==currentIds[i]);
+    if(!structureChanged && bar.querySelector('.tab-add')){
+      maps.forEach(m=>{
+        const tabEl=bar.querySelector('.tab[data-map-id="'+m.id+'"]'); if(!tabEl) return;
+        tabEl.classList.toggle('active', m.id===activeMapId);
+        const label=tabEl.querySelector('span'); if(label) label.textContent = m.id===activeMapId ? title : m.name;
+      });
+      return;
+    }
+    bar.innerHTML='';
+    maps.forEach(m=>{
+      const tab=document.createElement('div'); tab.className='tab'+(m.id===activeMapId?' active':'');
+      tab.setAttribute('data-map-id', m.id);
+      const label=document.createElement('span'); label.textContent = m.id===activeMapId ? title : m.name;
+      tab.appendChild(label);
+      if(maps.length>1){
+        const x=document.createElement('span'); x.className='tab-x'; x.textContent='✕'; x.title='Delete this map';
+        tab.appendChild(x);
+      }
+      bar.appendChild(tab);
+    });
+    const addBtn=document.createElement('button'); addBtn.className='tab-add'; addBtn.textContent='+'; addBtn.title='New map';
+    bar.appendChild(addBtn);
+  }
+  function setupTabbar(){
+    const bar=document.getElementById('tabbar');
+    bar.addEventListener('click', function(e){
+      if(e.target.closest('.tab-add')){ createMap(); return; }
+      const x=e.target.closest('.tab-x');
+      if(x){
+        const tabEl=x.closest('.tab'); const id=tabEl.getAttribute('data-map-id'); const m=maps.find(mm=>mm.id===id);
+        if(confirm('Delete "'+(id===activeMapId?title:(m?m.name:''))+'"?')) deleteMapById(id);
+        return;
+      }
+      const tabEl=e.target.closest('.tab');
+      if(tabEl){ const id=tabEl.getAttribute('data-map-id'); if(id!==activeMapId) switchToMap(id); }
+    });
+  }
+  function switchToMap(id){
+    if(id===activeMapId) return;
+    activeMapId=id;
+    const m=getActiveMap();
+    mainTree=m.tree; title=m.name; history=m.history||[]; historyIndex=(m.historyIndex!=null?m.historyIndex:-1);
+    selectedIds.clear(); dropTargetId=null;
+    const t=document.getElementById('titleEdit'); if(t) t.textContent=title;
+    updateDocTitle(); renderTabs();
+    commitLayout(); centerView(); scheduleSave();
+  }
+  function createMap(){
+    const m={id:uid(), name:'Untitled Map', tree:blankNode('Untitled Map'), history:[], historyIndex:-1};
+    maps.push(m); switchToMap(m.id);
+    setTimeout(()=>{ const t=document.getElementById('titleEdit'); if(t){ t.focus(); document.execCommand('selectAll',false,null); } }, 0);
+  }
+  function deleteMapById(id){
+    if(maps.length<=1) return;
+    const wasActive=id===activeMapId;
+    maps=maps.filter(m=>m.id!==id);
+    if(wasActive) switchToMap(maps[0].id); else { renderTabs(); scheduleSave(); }
+  }
+  function commitLayout(){ render(); resolveOverlaps(tree()); render(); }
+  function liveReflow(){
+    const root=tree(); const nodes=[]; collectVisible(root,nodes);
+    const world=document.getElementById('world');
+    nodes.forEach(n=>{ const el=world.querySelector('[data-id="'+n.id+'"]'); if(el){ n._w=el.offsetWidth; n._h=el.offsetHeight; } });
+    resolveOverlaps(root); // item 7.4: also keeps other expanded notepads from overlapping a notepad that grows while typing
+    nodes.forEach(n=>{ const el=world.querySelector('[data-id="'+n.id+'"]'); if(el){ el.style.left=n.x+'px'; el.style.top=n.y+'px'; } });
+    redrawDecorations(root); redrawWires(root);
+  }
+  const liveReflowDebounced = debounce(liveReflow, 90);
+  function requestRender(){ if(renderQueued) return; renderQueued=true; requestAnimationFrame(()=>{renderQueued=false; render();}); }
+  function updateWorldTransform(){
+    const wrap=document.getElementById('canvasWrap'), world=document.getElementById('world');
+    world.style.transform = 'translate(' + (wrap.clientWidth/2+panX) + 'px, ' + (wrap.clientHeight/2+panY) + 'px) scale(' + scale + ')';
+  }
+  function setupZoom(){
+    const wrap=document.getElementById('canvasWrap');
+    wrap.addEventListener('wheel', function(e){
+      e.preventDefault();
+      const rect=wrap.getBoundingClientRect();
+      const mouseX=e.clientX-rect.left, mouseY=e.clientY-rect.top;
+      const worldX=(mouseX-wrap.clientWidth/2-panX)/scale, worldY=(mouseY-wrap.clientHeight/2-panY)/scale;
+      let newScale = scale*Math.exp(-e.deltaY*0.0015);
+      newScale = Math.min(2.5, Math.max(0.2, newScale));
+      panX = mouseX - wrap.clientWidth/2 - worldX*newScale;
+      panY = mouseY - wrap.clientHeight/2 - worldY*newScale;
+      scale = newScale;
+      updateWorldTransform();
+    }, {passive:false});
+
+    // Pinch-to-zoom (touch): two fingers scale the map around the point between them, and moving both fingers together pans.
+    // Listeners are in the capture phase so a second finger never starts a node drag / pan of its own; any single-finger drag already in progress is finalized first.
+    let pinch=null;
+    function pinchGeom(e){
+      const a=e.touches[0], b=e.touches[1], rect=wrap.getBoundingClientRect();
+      return { dist:Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)||1, mx:(a.clientX+b.clientX)/2-rect.left, my:(a.clientY+b.clientY)/2-rect.top };
+    }
+    wrap.addEventListener('touchstart', function(e){
+      if(e.touches.length!==2) return;
+      if(activeDrag) activeDrag.upFn();
+      e.preventDefault(); e.stopPropagation();
+      const g=pinchGeom(e);
+      pinch={ startDist:g.dist, startScale:scale, worldX:(g.mx-wrap.clientWidth/2-panX)/scale, worldY:(g.my-wrap.clientHeight/2-panY)/scale };
+    }, {passive:false, capture:true});
+    wrap.addEventListener('touchmove', function(e){
+      if(!pinch || e.touches.length!==2) return;
+      e.preventDefault(); e.stopPropagation();
+      const g=pinchGeom(e);
+      const newScale=Math.min(2.5, Math.max(0.2, pinch.startScale*g.dist/pinch.startDist));
+      panX=g.mx-wrap.clientWidth/2-pinch.worldX*newScale;
+      panY=g.my-wrap.clientHeight/2-pinch.worldY*newScale;
+      scale=newScale;
+      updateWorldTransform();
+    }, {passive:false, capture:true});
+    function endPinch(e){ if(pinch && e.touches.length<2){ pinch=null; e.stopPropagation(); } }
+    wrap.addEventListener('touchend', endPinch, {capture:true});
+    wrap.addEventListener('touchcancel', endPinch, {capture:true});
+  }
+  function seqIndex(parent,node){ const sibs=parent.children.filter(s=>s.marker===node.marker); sibs.sort((a,b)=>(a.y-b.y)||(a.x-b.x)); return sibs.findIndex(s=>s.id===node.id)+1; }
+  function outPointFor(parent,child){ const dir=child.dir; const w=parent._w||0; const x = dir===-1? parent.x-w/2 : parent.x+w/2; return {x:x+HALF,y:parent.y+HALF}; }
+  function inPoint(node){ const w=node._w||0; const x = node.dir===-1? node.x+w/2 : node.x-w/2; return {x:x+HALF,y:node.y+HALF}; }
+  function seededJitter(str){ let h=0; for(let i=0;i<str.length;i++){ h=(h*31+str.charCodeAt(i))|0; } return (h%11)-5; }
+  function redrawWires(root){
+    const svg=document.getElementById('wiresSvg'); if(!svg) return; svg.innerHTML='';
+    const svgNS='http://www.w3.org/2000/svg';
+    (function drawWires(node){
+      if(node.collapsed) return;
+      for(const c of node.children){
+        const p1=outPointFor(node,c), p2=inPoint(c), midx=(p1.x+p2.x)/2, j=seededJitter(node.id+c.id);
+        const path=document.createElementNS(svgNS,'path');
+        path.setAttribute('d','M '+p1.x+' '+p1.y+' C '+midx+' '+(p1.y+j)+', '+midx+' '+(p2.y-j)+', '+p2.x+' '+p2.y);
+        svg.appendChild(path); drawWires(c);
+      }
+    })(root);
+  }
+  function redrawDecorations(root){
+    const world=document.getElementById('world');
+    let deco=document.getElementById('decorations');
+    if(!deco){ deco=document.createElement('div'); deco.id='decorations'; world.appendChild(deco); }
+    deco.innerHTML='';
+    function walkDecorate(node){
+      if(node.children.length){
+        const btn=document.createElement('div'); btn.className='collapse-btn';
+        btn.textContent = node.collapsed ? ('+'+node.children.length) : '▾';
+        btn.title = node.collapsed ? 'Expand' : 'Collapse';
+        const onLeft = node.dir===-1;
+        const nw=node._w||0; const left = onLeft ? node.x+nw/2+8 : node.x-nw/2-30;
+        btn.style.left=left+'px'; btn.style.top=(node.y-10)+'px';
+        btn.addEventListener('mousedown', e=>e.stopPropagation());
+        btn.addEventListener('click', ()=>{ node.collapsed=!node.collapsed; commitLayout(); scheduleSave(); }); // item 5 (rev4): commitLayout resolves overlaps on expand
+        deco.appendChild(btn);
+      }
+      if(!node.collapsed){ for(const c of node.children) walkDecorate(c); }
+    }
+    walkDecorate(root);
+  }
+  function render(){
+    const root=tree(); const world=document.getElementById('world'); world.innerHTML='';
+    const svgNS='http://www.w3.org/2000/svg';
+    const svg=document.createElementNS(svgNS,'svg');
+    svg.setAttribute('id','wiresSvg'); svg.setAttribute('class','wires');
+    svg.setAttribute('width',HALF*2); svg.setAttribute('height',HALF*2);
+    svg.setAttribute('style','left:'+(-HALF)+'px;top:'+(-HALF)+'px;');
+    world.appendChild(svg);
+    const elMap={};
+    function createMarkers(node){
+      const wrap=document.createElement('div'); wrap.className='markers'; let any=false;
+      if(node.marker==='number' || node.marker==='letter'){ // item 7.6: bullet/number/letter unified into one marker field
+        any=true; const parent=findParent(root,node.id,null); const idx=parent?seqIndex(parent,node):1;
+        const label = node.marker==='number' ? (idx+'.') : (toLetters(idx)+'.');
+        const m=document.createElement('div'); m.className='marker seq'; m.textContent=label; wrap.appendChild(m);
+      } else if(node.marker==='bullet'){
+        any=true; const m=document.createElement('div'); m.className='marker bullet'; m.textContent='●'; wrap.appendChild(m);
+      }
+      if(node.checkbox){
+        any=true; const cb=document.createElement('div'); cb.className='checkbox'+(node.checked?' checked':'');
+        cb.textContent = node.checked?'✓':''; cb.title='Toggle done';
+        cb.addEventListener('mousedown', e=>e.stopPropagation());
+        cb.addEventListener('click', e=>{ e.stopPropagation(); node.checked=!node.checked; render(); scheduleSave(); });
+        wrap.appendChild(cb);
+      }
+      return any?wrap:null;
+    }
+    function addChildTo(node,isRoot){
+      node.collapsed=false;
+      const dir = isRoot ? (node.children.filter(c=>c.dir===1).length <= node.children.filter(c=>c.dir===-1).length ? 1:-1) : node.dir;
+      const pos=placeNewChild(node,dir);
+      const child=blankNode('New item');
+      child.marker=node.marker; child.checkbox=node.checkbox;
+      child.dir=dir; child.x=pos.x; child.y=pos.y;
+      node.children.push(child); commitLayout(); scheduleSave();
+    }
+    function attachTextEditing(text,node,isRoot){
+      text.addEventListener('mousedown', e=>e.stopPropagation());
+      text.addEventListener('focus', ()=>{ node._editing=true; });
+      text.addEventListener('input', ()=>{ liveReflowDebounced(); });
+      text.addEventListener('blur', ()=>{
+        delete node._editing; node.text=text.textContent.trim()||'Untitled';
+        if(isRoot){ setTitle(node.text); const t=document.getElementById('titleEdit'); if(t) t.textContent=title; updateDocTitle(); }
+        commitLayout(); scheduleSave(); // was a plain render() — matches the notes-editor blur fix so a title edit always gets a final, full overlap-resolution pass, not just whatever the last debounced liveReflow left mid-typing
+      });
+      text.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); text.blur(); } });
+    }
+    function buildChecklistRow(labelText){
+      const row=document.createElement('div'); row.className='note-check';
+      const toggle=document.createElement('span'); toggle.className='note-check-toggle'; toggle.contentEditable='false';
+      const label=document.createElement('span'); label.className='note-check-label'; label.contentEditable='true';
+      const textNode=document.createTextNode(labelText);
+      label.appendChild(textNode);
+      row.appendChild(toggle); row.appendChild(label);
+      return {row, textNode};
+    }
+    function cleanNotesHtml(html){ return html.split('\u200B').join(''); } // strips the zero-width-space caret anchors used by the checklist Enter handler
+    function insertRowAtTopLevel(editorEl, row, range){
+      // Always lands the row as a direct child of editorEl (never inside a <p>/<li>/etc.) — inserting a
+      // block-level div into inline-flow content is invalid nesting, and browsers "fix" it on the next edit
+      // by restructuring the DOM out from under the caret, which is what caused item 4.6's corruption. the row as a direct child of editorEl (never inside a <p>/<li>/etc.) — inserting a
+      // block-level div into inline-flow content is invalid nesting, and browsers "fix" it on the next edit
+      // by restructuring the DOM out from under the caret, which is what caused item 4.6's corruption.
+      let ref = range ? range.startContainer : null;
+      if(ref === editorEl){ editorEl.appendChild(row); return; }
+      while(ref && ref.parentNode && ref.parentNode !== editorEl) ref = ref.parentNode;
+      if(ref && ref.parentNode === editorEl) editorEl.insertBefore(row, ref.nextSibling);
+      else editorEl.appendChild(row);
+    }
+    function insertChecklistItem(editorEl, node){ // item 6.1: checkbox list items inside the notepad's rich-text notes
+      editorEl.focus();
+      const {row, textNode} = buildChecklistRow('New item');
+      const sel=window.getSelection();
+      let range=null;
+      if(sel && sel.rangeCount){
+        const r=sel.getRangeAt(0);
+        if(editorEl.contains(r.commonAncestorContainer)) range=r;
+      }
+      insertRowAtTopLevel(editorEl, row, range);
+      // item 4.6a (rev 6): select ONLY the placeholder text (never the checkbox glyph), so typing cleanly
+      // replaces "New item" instead of the browser's post-insertion selection also eating the toggle span
+      if(sel){
+        const newRange=document.createRange();
+        newRange.selectNodeContents(textNode);
+        sel.removeAllRanges(); sel.addRange(newRange);
+      }
+      node.notes=cleanNotesHtml(editorEl.innerHTML); scheduleSave(); liveReflowDebounced();
+    }
+    function closestCheckLabel(domNode){
+      const el = domNode && domNode.nodeType===1 ? domNode : (domNode && domNode.parentElement);
+      return el ? el.closest('.note-check-label') : null;
+    }
+    function createBox(node){
+      const isRoot = node.dir===0;
+      const box=document.createElement('div');
+      box.className = 'node-box'+(isRoot?' root':'')+(node.checkbox&&node.checked?' is-checked':'')+(node.notesOpen?' expanded':'')+(selectedIds.has(node.id)?' selected':'')+(dropTargetId===node.id?' drop-target':'');
+      box.setAttribute('data-id', node.id);
+      box.style.left=node.x+'px'; box.style.top=node.y+'px'; box.style.transform='translate(-50%, -50%)';
+      if(node.notesOpen){
+        if(node.notesW) box.style.width=node.notesW+'px'; // item 6.2: remember a manually-resized notepad size
+        if(node.notesH) box.style.minHeight=node.notesH+'px';
+        const head=document.createElement('div'); head.className='expand-head';
+        const markers=createMarkers(node); if(markers) head.appendChild(markers);
+        const text=document.createElement('div'); text.className='text'; text.contentEditable='true'; text.spellcheck=false; text.textContent=node.text;
+        attachTextEditing(text,node,isRoot); head.appendChild(text);
+        const checkBtn=document.createElement('button'); checkBtn.className='icon-btn checkToggle'+(node.checkbox?' active':'');
+        checkBtn.textContent='☐'; checkBtn.title='Toggle checkbox';
+        checkBtn.addEventListener('mousedown', e=>e.stopPropagation());
+        checkBtn.addEventListener('click', e=>{ e.stopPropagation(); node.checkbox=!node.checkbox; if(!node.checkbox) node.checked=false; render(); scheduleSave(); });
+        head.appendChild(checkBtn);
+        const addB=document.createElement('button'); addB.className='icon-btn add-variant'; addB.textContent='+'; addB.title='Add sub-item';
+        addB.addEventListener('mousedown', e=>e.stopPropagation());
+        addB.addEventListener('click', e=>{ e.stopPropagation(); addChildTo(node,isRoot); });
+        head.appendChild(addB);
+        const shrink=document.createElement('button'); shrink.className='icon-btn shrink-variant'; shrink.textContent='⤡'; shrink.title='Collapse to card'; // item 4.3
+        shrink.addEventListener('mousedown', e=>e.stopPropagation());
+        shrink.addEventListener('click', e=>{ e.stopPropagation(); const ed=box.querySelector('.notes-editor'); if(ed) node.notes=cleanNotesHtml(ed.innerHTML); node.notesOpen=false; commitLayout(); scheduleSave(); });
+        head.appendChild(shrink);
+        if(!isRoot){ // item 4.5: delete option now also available on expanded notepads
+          const delB=document.createElement('button'); delB.className='icon-btn del-variant'; delB.textContent='×'; delB.title='Delete this item and its sub-items';
+          delB.addEventListener('mousedown', e=>e.stopPropagation());
+          delB.addEventListener('click', e=>{ e.stopPropagation(); const parent=findParent(root,node.id,null); if(parent){ parent.children=parent.children.filter(c=>c.id!==node.id); selectedIds.delete(node.id); commitLayout(); scheduleSave(); } });
+          head.appendChild(delB);
+        }
+        box.appendChild(head);
+        const toolbar=document.createElement('div'); toolbar.className='expand-toolbar';
+        const cmds=[['bold','Bold'],['italic','Italic'],['underline','Underline'],['formatBlock','Heading','H3'],['insertUnorderedList','• Bullets'],['insertOrderedList','1. Numbers'],['removeFormat','Clear']];
+        let editorEl;
+        cmds.forEach(function(c){ const b=document.createElement('button'); b.textContent=c[1];
+          b.addEventListener('mousedown', e=>e.preventDefault());
+          b.addEventListener('click', e=>{ e.stopPropagation(); editorEl.focus(); document.execCommand(c[0], false, c[2]||null); });
+          toolbar.appendChild(b); });
+        const checklistBtn=document.createElement('button'); checklistBtn.textContent='☑ Checklist';
+        checklistBtn.addEventListener('mousedown', e=>e.preventDefault());
+        checklistBtn.addEventListener('click', e=>{ e.stopPropagation(); insertChecklistItem(editorEl, node); });
+        toolbar.appendChild(checklistBtn);
+        box.appendChild(toolbar);
+        editorEl=document.createElement('div'); editorEl.className='notes-editor'; editorEl.contentEditable='true'; editorEl.innerHTML=node.notes||'';
+        editorEl.addEventListener('mousedown', e=>e.stopPropagation());
+        editorEl.addEventListener('focus', ()=>{ node._editing=true; });
+        editorEl.addEventListener('input', ()=>{ liveReflowDebounced(); }); // item 4.1/4.4: growth from typing in the notes body now re-measures and re-checks overlaps
+        editorEl.addEventListener('blur', ()=>{ delete node._editing; node.notes=cleanNotesHtml(editorEl.innerHTML); commitLayout(); scheduleSave(); });
+        editorEl.addEventListener('click', e=>{ // item 6.1: click a checklist item's toggle to mark it done
+          const t=e.target.closest('.note-check-toggle'); if(!t) return;
+          e.preventDefault();
+          const row=t.closest('.note-check'); if(!row) return;
+          row.classList.toggle('checked');
+          node.notes=cleanNotesHtml(editorEl.innerHTML); scheduleSave();
+        });
+        editorEl.addEventListener('keydown', e=>{ // item 4.6b: Enter inside a checklist item continues the list instead of a plain line break
+          if(e.key!=='Enter') return;
+          const sel=window.getSelection(); if(!sel || !sel.rangeCount) return;
+          const range=sel.getRangeAt(0);
+          const label=closestCheckLabel(range.startContainer);
+          if(!label) return; // not inside a checklist item — keep normal contenteditable behavior
+          e.preventDefault();
+          const row=label.closest('.note-check');
+          // A genuinely empty text node is not a stable caret anchor in contenteditable — the browser can
+          // silently relocate the caret elsewhere on the very next keystroke. A zero-width space keeps the
+          // node "real" so the caret (and the next character typed) reliably lands in the new row.
+          const {row:newRow, textNode:newText}=buildChecklistRow('\u200B');
+          row.parentNode.insertBefore(newRow, row.nextSibling);
+          const newRange=document.createRange();
+          newRange.setStart(newText,1); newRange.collapse(true);
+          sel.removeAllRanges(); sel.addRange(newRange);
+          node.notes=cleanNotesHtml(editorEl.innerHTML); scheduleSave(); liveReflowDebounced();
+        });
+        box.appendChild(editorEl);
+        const resizeHandle=document.createElement('div'); resizeHandle.className='resize-handle'; resizeHandle.textContent='⇲'; resizeHandle.title='Drag to resize'; // item 6.2
+        function onResizeDown(e){
+          e.stopPropagation(); e.preventDefault();
+          const start=eventXY(e); const startX=start.clientX, startY=start.clientY;
+          const startW=node.notesW || box.offsetWidth, startH=node.notesH || box.offsetHeight;
+          let prevW=startW, prevH=startH; // item (rev 7): track incrementally off the CURRENT node.x/y each frame, not a fixed drag-start snapshot — a stale snapshot fights any resolveOverlaps adjustment (triggered mid-drag by liveReflowDebounced) on the very next mousemove
+          function onMove(ev){
+            if(isTouch(ev) && ev.cancelable) ev.preventDefault();
+            const p=eventXY(ev);
+            const dx=(p.clientX-startX)/scale, dy=(p.clientY-startY)/scale;
+            const newW=Math.max(280, startW+dx), newH=Math.max(180, startH+dy);
+            node.notesW=newW; node.notesH=newH;
+            node.x += (newW-prevW)/2; node.y += (newH-prevH)/2;
+            prevW=newW; prevH=newH;
+            box.style.width=newW+'px'; box.style.minHeight=newH+'px';
+            box.style.left=node.x+'px'; box.style.top=node.y+'px';
+            liveReflowDebounced();
+          }
+          function onUp(){ removeDragListeners(onMove,onUp); commitLayout(); scheduleSave(); }
+          addDragListeners(onMove,onUp);
+        }
+        resizeHandle.addEventListener('mousedown', onResizeDown);
+        resizeHandle.addEventListener('touchstart', onResizeDown, {passive:false});
+        box.appendChild(resizeHandle);
+      } else {
+        const row=document.createElement('div'); row.className='content-row'; // item 7.2: no more drag-handle glyph — empty space itself is the drag surface (item 7.1)
+        const markers=createMarkers(node); if(markers) row.appendChild(markers);
+        const text=document.createElement('div'); text.className='text'; text.contentEditable='true'; text.spellcheck=false; text.textContent=node.text;
+        attachTextEditing(text,node,isRoot); row.appendChild(text);
+        box.appendChild(row);
+        if(node.notes && node.notes.replace(/<[^>]*>/g,'').trim().length){ const dot=document.createElement('div'); dot.className='notes-dot'; dot.title='Has notes'; box.appendChild(dot); }
+        const toolbar=document.createElement('div'); toolbar.className='toolbar';
+        const markerBtn=document.createElement('button'); markerBtn.className='markerToggle'+(node.marker!=='none'?' active':''); // item 7.6
+        const markerLabels={none:'#',bullet:'●',number:'1.',letter:'a.'};
+        markerBtn.textContent = markerLabels[node.marker]||'#'; markerBtn.title='Cycle marker: none / bullet / number / letter';
+        markerBtn.addEventListener('mousedown', e=>e.stopPropagation());
+        markerBtn.addEventListener('click', e=>{ e.stopPropagation(); const order=['none','bullet','number','letter']; node.marker=order[(order.indexOf(node.marker)+1)%order.length]; render(); scheduleSave(); });
+        toolbar.appendChild(markerBtn);
+        const checkBtn=document.createElement('button'); checkBtn.className='checkToggle'+(node.checkbox?' active':''); checkBtn.textContent='☐'; checkBtn.title='Toggle checkbox';
+        checkBtn.addEventListener('mousedown', e=>e.stopPropagation());
+        checkBtn.addEventListener('click', e=>{ e.stopPropagation(); node.checkbox=!node.checkbox; if(!node.checkbox) node.checked=false; render(); scheduleSave(); });
+        toolbar.appendChild(checkBtn);
+        const notesBtn=document.createElement('button'); notesBtn.className='notesBtn'; notesBtn.textContent='⤢'; notesBtn.title='Expand into notepad';
+        notesBtn.addEventListener('mousedown', e=>e.stopPropagation());
+        notesBtn.addEventListener('click', e=>{ e.stopPropagation(); node.notesOpen=true; commitLayout(); scheduleSave(); });
+        toolbar.appendChild(notesBtn);
+        const addBtn=document.createElement('button'); addBtn.className='add'; addBtn.textContent='+'; addBtn.title='Add sub-item';
+        addBtn.addEventListener('mousedown', e=>e.stopPropagation());
+        addBtn.addEventListener('click', e=>{ e.stopPropagation(); addChildTo(node,isRoot); });
+        toolbar.appendChild(addBtn);
+        const delBtn=document.createElement('button'); delBtn.className='del'; delBtn.textContent='×'; // item 7.7: always shown, disabled+red-dark on root
+        delBtn.title = isRoot ? 'The root item cannot be deleted' : 'Delete this item and its sub-items';
+        if(isRoot) delBtn.disabled=true;
+        delBtn.addEventListener('mousedown', e=>e.stopPropagation());
+        delBtn.addEventListener('click', e=>{ e.stopPropagation(); if(isRoot) return; const parent=findParent(root,node.id,null); if(parent){ parent.children=parent.children.filter(c=>c.id!==node.id); selectedIds.delete(node.id); commitLayout(); scheduleSave(); } });
+        toolbar.appendChild(delBtn);
+        box.appendChild(toolbar);
+      }
+      enableDrag(box,node,isRoot);
+      world.appendChild(box); elMap[node.id]=box; return box;
+    }
+    (function walkCreate(node){ createBox(node); if(!node.collapsed){ for(const c of node.children) walkCreate(c); } })(root);
+    for(const id in elMap){ const node=findNode(root,id), el=elMap[id]; node._w=el.offsetWidth; node._h=el.offsetHeight; }
+    redrawDecorations(root); redrawWires(root); updateWorldTransform();
+  }
+  function toggleSelect(id){ if(selectedIds.has(id)) selectedIds.delete(id); else selectedIds.add(id); render(); }
+  function beginNodeDrag(node,isRoot,e){ // item 3 (rev 6): shared by a box's own mousedown AND the canvas's margin-proximity check below
+    if(isTouch(e)) e.preventDefault(); // stop the page from scrolling once a node-drag has actually started
+    const root=tree();
+    const group = (!isRoot && selectedIds.has(node.id) && selectedIds.size>1) ? [...selectedIds] : [node.id];
+    const start=eventXY(e); const startX=start.clientX, startY=start.clientY; const orig={};
+    group.forEach(id=>{ const n=findNode(root,id); orig[id]={x:n.x,y:n.y}; });
+    let moved=false, lastDropTargetId=null;
+    const wrap=document.getElementById('canvasWrap');
+    function onMove(ev){
+      const p=eventXY(ev);
+      const rawDx=p.clientX-startX, rawDy=p.clientY-startY;
+      if(Math.abs(rawDx)>4||Math.abs(rawDy)>4) moved=true;
+      if(!moved) return;
+      if(isTouch(ev) && ev.cancelable) ev.preventDefault();
+      const dx=rawDx/scale, dy=rawDy/scale;
+      group.forEach(id=>{ const n=findNode(root,id); n.x=orig[id].x+dx; n.y=orig[id].y+dy; });
+      if(!isRoot){
+        const primary=findNode(root,node.id); const visible=[]; collectVisible(root,visible);
+        const rect=wrap.getBoundingClientRect(); // item 7.3: reparenting also requires the mouse to be over the candidate parent
+        const mouseWorldX=(p.clientX-rect.left-wrap.clientWidth/2-panX)/scale, mouseWorldY=(p.clientY-rect.top-wrap.clientHeight/2-panY)/scale;
+        let best=null,bestArea=0;
+        visible.forEach(cand=>{
+          if(group.includes(cand.id)) return;
+          if(cand._w==null) return;
+          if(group.some(id=>isDescendant(findNode(root,id),cand.id))) return;
+          const withinX = mouseWorldX >= cand.x-cand._w/2 && mouseWorldX <= cand.x+cand._w/2;
+          const withinY = mouseWorldY >= cand.y-cand._h/2 && mouseWorldY <= cand.y+cand._h/2;
+          if(!withinX || !withinY) return;
+          const area=boxesOverlapArea(primary,cand);
+          if(area>bestArea){ bestArea=area; best=cand.id; }
+        });
+        dropTargetId=best;
+      } else { dropTargetId=null; }
+      // Non-destructive update while the drag is in progress: requestRender()'s full render() tears down and rebuilds
+      // every box (innerHTML=''). Doing that mid-gesture orphans the touch's original target element, and the browser
+      // silently stops delivering the rest of that touch's events -- the drag would visibly move once, then freeze for
+      // the remainder of the gesture (mouse drags don't hit this, since there's no OS-level touch-target tracking to
+      // break, but liveReflow() is just as correct there too, so the same path is used for both).
+      liveReflow();
+      if(dropTargetId!==lastDropTargetId){
+        if(lastDropTargetId){ const prevEl=document.querySelector('[data-id="'+lastDropTargetId+'"]'); if(prevEl) prevEl.classList.remove('drop-target'); }
+        if(dropTargetId){ const nextEl=document.querySelector('[data-id="'+dropTargetId+'"]'); if(nextEl) nextEl.classList.add('drop-target'); }
+        lastDropTargetId=dropTargetId;
+      }
+    }
+    function onUp(){
+      removeDragListeners(onMove,onUp);
+      if(moved){
+        if(!isRoot && dropTargetId){
+          const target=findNode(root,dropTargetId); target.collapsed=false;
+          group.forEach(id=>{
+            const n=findNode(root,id); const oldParent=findParent(root,id,null);
+            if(oldParent) oldParent.children=oldParent.children.filter(c=>c.id!==id);
+            const dir = target.dir===0 ? (target.children.filter(c=>c.dir===1).length<=target.children.filter(c=>c.dir===-1).length?1:-1) : target.dir;
+            const pos=placeNewChild(target,dir); n.dir=dir; n.x=pos.x; n.y=pos.y; n.manual=false;
+            target.children.push(n);
+          });
+        } else { group.forEach(id=>{ findNode(root,id).manual=true; }); }
+        dropTargetId=null; commitLayout(); scheduleSave();
+      }
+    }
+    addDragListeners(onMove,onUp);
+  }
+  function enableDrag(box,node,isRoot){
+    function onDown(e){
+      if(!isTouch(e) && e.button!==0) return;
+      if(e.ctrlKey||e.metaKey){ if(!isRoot){ e.preventDefault(); toggleSelect(node.id); } return; }
+      if(isTouch(e) && e.target.closest('.text, .checkbox, button') && !e.target.closest('.notes-editor, .resize-handle')){
+        // Touch: a node is mostly title + buttons, so those must be grabbable too. A plain tap still edits/clicks as usual
+        // (and still repositions the cursor if the title is already focused); only once the finger actually moves past a
+        // small slop does it turn into a node drag -- which also blurs the title below, even if it was already focused
+        // from an earlier tap (that must not permanently block dragging from it).
+        const sx=e.touches[0].clientX, sy=e.touches[0].clientY;
+        const fake={ touches:[{clientX:sx,clientY:sy}], preventDefault(){} };
+        function cleanup(){ document.removeEventListener('touchmove',onPendingMove); document.removeEventListener('touchend',cleanup); document.removeEventListener('touchcancel',cleanup); }
+        function onPendingMove(ev){
+          if(!ev.touches.length) return;
+          const p=ev.touches[0];
+          if(Math.hypot(p.clientX-sx,p.clientY-sy)<8) return;
+          cleanup();
+          // Deliberately NOT blurring a focused title/notes-editor here: both their blur handlers call commitLayout(),
+          // which synchronously tears down and rebuilds the whole #world DOM (innerHTML=''). Doing that mid-touch-sequence
+          // orphans the original touch target, and Chrome silently drops every remaining touchmove/touchend for that
+          // finger -- the drag would start then instantly go dead. Any focus visually clears itself once the drag ends
+          // and commitLayout() runs then instead.
+          beginNodeDrag(node,isRoot,fake);
+          if(ev.cancelable) ev.preventDefault();
+        }
+        document.addEventListener('touchmove',onPendingMove,{passive:false}); document.addEventListener('touchend',cleanup); document.addEventListener('touchcancel',cleanup);
+        return;
+      }
+      if(e.target.closest('.text, .checkbox, .notes-editor, .resize-handle, button')) return; // item (rev 7): only real controls are excluded now — empty space inside the toolbar/expand-toolbar rows (and the head row's trailing gap) is draggable too, matching the marker area already freed up in rev 6
+      beginNodeDrag(node,isRoot,e);
+    }
+    box.addEventListener('mousedown', onDown);
+    box.addEventListener('touchstart', onDown, {passive:false});
+  }
+  function findNodeNearPoint(worldX,worldY,margin){ // item 3 (rev 6): extends the click-draggable area beyond a segment's own edges
+    const visible=[]; collectVisible(tree(),visible);
+    let best=null,bestDist=Infinity;
+    for(const n of visible){
+      if(n._w==null) continue;
+      const inActualX = worldX>=n.x-n._w/2 && worldX<=n.x+n._w/2;
+      const inActualY = worldY>=n.y-n._h/2 && worldY<=n.y+n._h/2;
+      if(inActualX && inActualY) continue; // clicks directly on the box are already handled by its own mousedown listener
+      const x1=n.x-n._w/2-margin, x2=n.x+n._w/2+margin, y1=n.y-n._h/2-margin, y2=n.y+n._h/2+margin;
+      if(worldX<x1||worldX>x2||worldY<y1||worldY>y2) continue;
+      const dx=Math.max(n.x-n._w/2-worldX, 0, worldX-(n.x+n._w/2));
+      const dy=Math.max(n.y-n._h/2-worldY, 0, worldY-(n.y+n._h/2));
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<bestDist){ bestDist=dist; best=n; }
+    }
+    return best;
+  }
+  function setupPan(){
+    const wrap=document.getElementById('canvasWrap');
+    function onDown(e){
+      if(!isTouch(e) && e.button!==0) return;
+      if(e.target.closest('.node-box, .collapse-btn')) return;
+      if(!e.ctrlKey && !e.metaKey){
+        const p=eventXY(e);
+        const rect=wrap.getBoundingClientRect();
+        const worldX=(p.clientX-rect.left-wrap.clientWidth/2-panX)/scale, worldY=(p.clientY-rect.top-wrap.clientHeight/2-panY)/scale;
+        const nearNode=findNodeNearPoint(worldX,worldY,DRAG_MARGIN);
+        if(nearNode){ beginNodeDrag(nearNode, nearNode.dir===0, e); return; }
+      }
+      if(!e.ctrlKey && !e.metaKey && selectedIds.size){ selectedIds.clear(); render(); }
+      const start=eventXY(e); const startX=start.clientX, startY=start.clientY, origX=panX, origY=panY;
+      wrap.classList.add('panning');
+      let moved=false;
+      function onMove(ev){
+        const p=eventXY(ev);
+        if(isTouch(ev)){ if(Math.abs(p.clientX-startX)>4||Math.abs(p.clientY-startY)>4) moved=true; if(moved && ev.cancelable) ev.preventDefault(); }
+        panX=origX+(p.clientX-startX); panY=origY+(p.clientY-startY); updateWorldTransform();
+      }
+      function onUp(){ removeDragListeners(onMove,onUp); wrap.classList.remove('panning'); }
+      addDragListeners(onMove,onUp);
+    }
+    wrap.addEventListener('mousedown', onDown);
+    wrap.addEventListener('touchstart', onDown, {passive:false});
+    window.addEventListener('resize', updateWorldTransform);
+  }
+  function centerView(){ const root=tree(); panX=-root.x*scale; panY=-root.y*scale; updateWorldTransform(); } // item 7.5: always centers on the root node
+  function setAllCollapsed(node,val){ if(node.children.length) node.collapsed=val; for(const c of node.children) setAllCollapsed(c,val); }
+  document.getElementById('titleEdit').addEventListener('blur', function(){
+    const t=document.getElementById('titleEdit'); setTitle(t.textContent.trim()||'Untitled'); t.textContent=title;
+    tree().text = title; updateDocTitle(); render(); scheduleSave();
+  });
+  document.getElementById('titleEdit').addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); document.getElementById('titleEdit').blur(); } });
+  document.getElementById('undoBtn').addEventListener('click', undo);
+  document.getElementById('redoBtn').addEventListener('click', redo);
+  function setupShortcuts(){
+    document.addEventListener('keydown', function(e){
+      const meta = e.ctrlKey || e.metaKey;
+      if(!meta) return;
+      const active = document.activeElement;
+      const isEditing = active && (active.isContentEditable || active.tagName==='INPUT' || active.tagName==='TEXTAREA');
+      if(isEditing) return;
+      const key = e.key.toLowerCase();
+      if(key==='z' && !e.shiftKey){ e.preventDefault(); undo(); }
+      else if(key==='y' || (key==='z' && e.shiftKey)){ e.preventDefault(); redo(); }
+    });
+  }
+  document.getElementById('centerBtn').addEventListener('click', centerView);
+  document.getElementById('expandAllBtn').addEventListener('click', function(){ setAllCollapsed(tree(),false); commitLayout(); scheduleSave(); });
+  document.getElementById('collapseAllBtn').addEventListener('click', function(){ for(const c of tree().children) setAllCollapsed(c,true); commitLayout(); scheduleSave(); });
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    if(confirm('Clear this map and start with a blank map?')){ setMainTree(blankNode(title)); commitLayout(); scheduleSave(); centerView(); }
+  });
+  function exportHtml(){ // item 4.2: download a standalone, fully functional copy of the current map
+    const dataScript = '\n<script>window.__EXPORTED_TREE__ = ' + JSON.stringify(mainTree, (k,v)=>k.startsWith('_')?undefined:v) + ';\nwindow.__EXPORTED_TITLE__ = ' + JSON.stringify(title) + ';<\/script>\n';
+    const html = '<!DOCTYPE html>\n' + ORIGINAL_HTML.replace('<head>', '<head>'+dataScript);
+    const blob = new Blob([html], {type:'text/html'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href=url; a.download=(title||'mindmap').replace(/[^a-z0-9\-_]+/gi,'_')+'.html';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url), 1000);
+  }
+  document.getElementById('exportBtn').addEventListener('click', exportHtml);
+  function applyTheme(id){ document.documentElement.setAttribute('data-theme', id); try{ localStorage.setItem(THEME_KEY, id); }catch(e){} }
+  function applyFont(id){
+    const f=FONTS.find(f=>f[0]===id) || FONTS[0];
+    document.documentElement.style.setProperty('--body-font', f[1]);
+    try{ localStorage.setItem(FONT_KEY, id); }catch(e){}
+  }
+  function setupThemeFontSelectors(){ // item 5: theme + font dropdowns, top right
+    const themeSel=document.getElementById('themeSelect');
+    THEMES.forEach(t=>{ const o=document.createElement('option'); o.value=t[0]; o.textContent=t[1]; themeSel.appendChild(o); });
+    let savedTheme='chalkboard'; try{ savedTheme=localStorage.getItem(THEME_KEY)||'chalkboard'; }catch(e){}
+    if(!THEMES.some(t=>t[0]===savedTheme)) savedTheme='chalkboard';
+    themeSel.value=savedTheme; applyTheme(savedTheme);
+    themeSel.addEventListener('change', ()=>applyTheme(themeSel.value));
+    const fontSel=document.getElementById('fontSelect');
+    FONTS.forEach(f=>{ const o=document.createElement('option'); o.value=f[0]; o.textContent=f[2]; fontSel.appendChild(o); });
+    let savedFont='patrick'; try{ savedFont=localStorage.getItem(FONT_KEY)||'patrick'; }catch(e){}
+    if(!FONTS.some(f=>f[0]===savedFont)) savedFont='patrick';
+    fontSel.value=savedFont; applyFont(savedFont);
+    fontSel.addEventListener('change', ()=>applyFont(fontSel.value));
+  }
+  setupThemeFontSelectors();
+  loadSaved();
+  document.getElementById('titleEdit').textContent = title;
+  updateDocTitle();
+  renderTabs();
+  setupTabbar();
+  setupPan();
+  setupZoom();
+  setupShortcuts();
+  commitLayout();
+  centerView();
+  pushHistory();
+  saveData();
+  if(document.fonts && document.fonts.ready){ // safety net: web fonts load asynchronously, so a box measured before its font finishes loading can silently resize once the browser swaps fonts — with nothing to re-run overlap resolution or redraw wires afterward. Once fonts are confirmed loaded, force one more full layout pass so any such drift gets corrected.
+    document.fonts.ready.then(()=>{ commitLayout(); });
+  }
+})();
+</script>
+<script>
+  // PWA: register service worker for offline support + installability.
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(()=>{ /* offline support unavailable; app still works online */ });
+    });
+  }
+</script>
+</body>
+</html>
